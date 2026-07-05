@@ -1,0 +1,16 @@
+rules_version = '2';
+
+// No Firebase Auth: signInWithRedirect turned out to be broken by cross-origin
+// storage partitioning between this app's origin and the authDomain iframe
+// (increasingly locked down by browsers), and anonymous auth risks losing the
+// uid to iOS Safari's storage eviction in a home-screen PWA. This is a single-
+// user personal app — the tradeoff is an open Firestore, kept safe only by the
+// app's URL not being published anywhere. Revisit with Firebase App Check if
+// that stops being good enough.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

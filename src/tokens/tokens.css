@@ -1,0 +1,132 @@
+/*
+  Design tokens — single source of truth for all values used in components.
+  Components must reference these via var(--token-name), never hardcode.
+*/
+:root {
+  /* Color: surfaces — warm off-white paper tone, white cards float above it */
+  --color-bg: #f6f5f1;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-border: #e8e6e0;
+
+  /* Color: text */
+  --color-text: #201f1a;
+  --color-text-muted: #746f65;
+  --color-text-inverse: #ffffff;
+
+  /* Color: brand / accent — teal, travel/adventure, distinct from every status chip color */
+  --color-accent: #0d9488;
+  --color-accent-hover: #0f766e;
+  --color-accent-bg: rgba(13, 148, 136, 0.1);
+  --color-accent-border: rgba(13, 148, 136, 0.35);
+
+  /* Color: semantic */
+  --color-danger: #dc2626;
+  --color-danger-bg: rgba(220, 38, 38, 0.1);
+  --color-danger-hover: #b91c1c;
+  --color-success: #16a34a;
+  --color-success-bg: rgba(22, 163, 74, 0.1);
+  --color-warning: #d97706;
+  --color-warning-bg: rgba(217, 119, 6, 0.12);
+
+  /* Color: item status pipeline chips */
+  --color-status-idea: #8b8b96;
+  --color-status-idea-bg: rgba(139, 139, 150, 0.14);
+  --color-status-to_book: #d97706;
+  --color-status-to_book-bg: rgba(217, 119, 6, 0.12);
+  --color-status-booked: #2563eb;
+  --color-status-booked-bg: rgba(37, 99, 235, 0.1);
+  --color-status-paid: #7c3aed;
+  --color-status-paid-bg: rgba(124, 58, 237, 0.1);
+  --color-status-confirmed: #16a34a;
+  --color-status-confirmed-bg: rgba(22, 163, 74, 0.1);
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  /* Typography */
+  --font-sans: -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, monospace;
+
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 20px;
+  --font-size-xl: 26px;
+  --font-size-2xl: 34px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.02em;
+
+  /* Shadow — layered for real elevation, not a single flat drop */
+  --shadow-sm: 0 1px 2px rgba(32, 31, 26, 0.05);
+  --shadow-card: 0 1px 2px rgba(32, 31, 26, 0.04), 0 8px 20px -6px rgba(32, 31, 26, 0.1);
+  --shadow-md: 0 4px 12px rgba(32, 31, 26, 0.08);
+  --shadow-lg: 0 12px 32px -8px rgba(32, 31, 26, 0.18);
+
+  /* Layout */
+  --nav-height: 60px;
+  --content-max-width: 640px;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #14140f;
+    --color-surface: #1e1e18;
+    --color-surface-raised: #262620;
+    --color-border: #38372e;
+
+    --color-text: #f3f2ec;
+    --color-text-muted: #a8a396;
+
+    --color-accent: #2dd4bf;
+    --color-accent-hover: #5eead4;
+    --color-accent-bg: rgba(45, 212, 191, 0.14);
+    --color-accent-border: rgba(45, 212, 191, 0.4);
+
+    --color-danger: #f87171;
+    --color-danger-bg: rgba(248, 113, 113, 0.14);
+    --color-danger-hover: #fca5a5;
+    --color-success: #4ade80;
+    --color-success-bg: rgba(74, 222, 128, 0.14);
+    --color-warning: #fbbf24;
+    --color-warning-bg: rgba(251, 191, 36, 0.14);
+
+    --color-status-idea: #a3a3ae;
+    --color-status-idea-bg: rgba(163, 163, 174, 0.16);
+    --color-status-to_book: #fbbf24;
+    --color-status-to_book-bg: rgba(251, 191, 36, 0.14);
+    --color-status-booked: #5b8def;
+    --color-status-booked-bg: rgba(91, 141, 239, 0.16);
+    --color-status-paid: #a78bfa;
+    --color-status-paid-bg: rgba(167, 139, 250, 0.16);
+    --color-status-confirmed: #4ade80;
+    --color-status-confirmed-bg: rgba(74, 222, 128, 0.14);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -6px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.5);
+  }
+}
