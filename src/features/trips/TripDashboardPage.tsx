@@ -1,4 +1,4 @@
-import { ArrowLeftRight, Pencil, Plus, Scale } from 'lucide-react'
+import { ArrowLeftRight, ListChecks, Pencil, Plus, Scale } from 'lucide-react'
 import { useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ProgressBar } from '../../components/ProgressBar'
@@ -96,6 +96,9 @@ export function TripDashboardPage() {
         </Link>
         <Link to={`/trips/${tripId}/converter`} className="btn btn-ghost" style={{ fontSize: fontSize.sm }}>
           <ArrowLeftRight size={16} /> Przelicznik
+        </Link>
+        <Link to={`/trips/${tripId}/checklist`} className="btn btn-ghost" style={{ fontSize: fontSize.sm }}>
+          <ListChecks size={16} /> Checklista
         </Link>
       </div>
 

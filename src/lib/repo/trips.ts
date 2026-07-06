@@ -78,7 +78,7 @@ export async function updateTrip(tripId: string, patch: Partial<TripDraft>) {
 
 /** Deletes the trip and every document in its subcollections (participants, items, payments). */
 export async function deleteTrip(tripId: string) {
-  const subcollections = ['participants', 'items', 'payments']
+  const subcollections = ['participants', 'items', 'payments', 'checklist']
   for (const name of subcollections) {
     const snap = await getDocs(collection(db, 'trips', tripId, name))
     const batch = writeBatch(db)

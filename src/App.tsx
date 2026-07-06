@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './app/Layout'
 import { ArchivePage } from './features/archive/ArchivePage'
+import { ChecklistPage } from './features/checklist/ChecklistPage'
 import { ConverterPage } from './features/converter/ConverterPage'
 import { ItemFormPage } from './features/items/ItemFormPage'
 import { SettingsPage } from './features/settings/SettingsPage'
@@ -23,6 +24,7 @@ export function App() {
         <Route path="trips/:tripId/items/:itemId" element={<ItemFormPage />} />
         <Route path="trips/:tripId/settlements" element={<SettlementsPage />} />
         <Route path="trips/:tripId/converter" element={<ConverterPage />} />
+        <Route path="trips/:tripId/checklist" element={<ChecklistPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
