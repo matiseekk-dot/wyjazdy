@@ -8,6 +8,12 @@ html,
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
+  /* The page itself must never scroll — only <main> (see Layout.tsx) does. A plain
+     min-height on #root doesn't cap growth, so oversized content used to push the
+     whole document taller than the viewport, which broke internal scrolling and let
+     the fixed bottom nav cover real content (buttons became unclickable). */
+  overflow: hidden;
 }
 
 body {
@@ -22,7 +28,7 @@ body {
 }
 
 #root {
-  min-height: 100svh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
 }

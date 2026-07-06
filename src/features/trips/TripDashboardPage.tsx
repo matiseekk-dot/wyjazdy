@@ -1,4 +1,4 @@
-import { ArrowLeftRight, Plus, Scale } from 'lucide-react'
+import { ArrowLeftRight, Pencil, Plus, Scale } from 'lucide-react'
 import { useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ProgressBar } from '../../components/ProgressBar'
@@ -41,7 +41,12 @@ export function TripDashboardPage() {
 
   return (
     <div style={{ padding: spacing[5] }}>
-      <h1 style={{ fontSize: fontSize.xl }}>{trip.name}</h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h1 style={{ fontSize: fontSize.xl }}>{trip.name}</h1>
+        <Link to={`/trips/${tripId}/edit`} aria-label="Edytuj wyjazd" style={{ color: colors.textMuted, display: 'flex' }}>
+          <Pencil size={18} />
+        </Link>
+      </div>
       <p style={{ color: colors.textMuted, marginTop: spacing[1] }}>
         {formatTripDates(trip.startDate, trip.endDate, trip.yearOnly)}
         {trip.countries.length > 0 ? ` · ${trip.countries.join(', ')}` : ''}

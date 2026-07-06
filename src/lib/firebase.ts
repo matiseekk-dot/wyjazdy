@@ -17,6 +17,10 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig)
 
 // Offline persistence is the whole point — this app is used mid-trip without signal.
+// ignoreUndefinedProperties: form fields left empty become `undefined` (e.g. optional
+// item.provider) and Firestore rejects `undefined` outright otherwise, throwing
+// invalid-argument on every write that has an empty optional field.
 export const db = initializeFirestore(app, {
   localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+  ignoreUndefinedProperties: true,
 })

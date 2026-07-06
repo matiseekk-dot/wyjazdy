@@ -8,10 +8,16 @@ const tabs = [
   { to: '/settings', label: 'Ustawienia', icon: Settings, end: false },
 ]
 
+// Reserved clearance above the fixed nav: its own height + the iPhone home-indicator
+// safe area + a buffer, because scrollIntoView() can pull real content flush against
+// the viewport edge (ignoring padding), which visually and pointer-wise hides it
+// behind the nav — this is exactly what made the item form's "Zapisz" unclickable.
+const bottomClearance = `calc(${layout.navHeight} + env(safe-area-inset-bottom) + ${spacing[6]})`
+
 export function Layout() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
-      <main style={{ flex: 1, overflowY: 'auto', paddingBottom: layout.navHeight }}>
+      <main style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: bottomClearance, scrollPaddingBottom: bottomClearance }}>
         <Outlet />
       </main>
       <nav style={styles.nav}>

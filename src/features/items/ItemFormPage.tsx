@@ -39,6 +39,7 @@ export function ItemFormPage() {
   const [splitShares, setSplitShares] = useState<Record<string, string>>({})
   const [splitCustom, setSplitCustom] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!tripId) return
@@ -123,6 +124,7 @@ export function ItemFormPage() {
     e.preventDefault()
     if (!tripId || !title.trim() || splitAmong.length === 0 || !customSumValid) return
     setSaving(true)
+    setSaveError(null)
 
     const draft = {
       category,
@@ -151,19 +153,28 @@ export function ItemFormPage() {
           : undefined,
     }
 
-    if (isEdit && itemId) {
-      await updateItem(tripId, itemId, draft)
-    } else {
-      await createItem(tripId, draft)
+    try {
+      if (isEdit && itemId) {
+        await updateItem(tripId, itemId, draft)
+      } else {
+        await createItem(tripId, draft)
+      }
+      navigate(`/trips/${tripId}`)
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Nie udało się zapisać pozycji.')
+      setSaving(false)
     }
-    navigate(`/trips/${tripId}`)
   }
 
   async function handleDelete() {
     if (!tripId || !itemId) return
     if (!window.confirm('Usunąć tę pozycję?')) return
-    await deleteItem(tripId, itemId)
-    navigate(`/trips/${tripId}`)
+    try {
+      await deleteItem(tripId, itemId)
+      navigate(`/trips/${tripId}`)
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Nie udało się usunąć pozycji.')
+    }
   }
 
   if (!loaded) {
@@ -451,6 +462,9 @@ export function ItemFormPage() {
           <textarea id="notes" style={{ ...formStyles.input, minHeight: 80 }} value={notes} onChange={(e) => setNotes(e.target.value)} />
         </div>
 
+        {saveError && (
+          <p style={{ color: colors.danger, fontSize: fontSize.sm, marginBottom: spacing[3] }}>{saveError}</p>
+        )}
         <div style={{ display: 'flex', gap: spacing[3] }}>
           <button
             type="submit"

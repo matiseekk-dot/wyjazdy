@@ -1,5 +1,6 @@
-import { Star } from 'lucide-react'
+import { Pencil, Star } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { CATEGORY_ICONS } from '../../lib/categoryIcons'
 import { othersBalances } from '../../lib/balances'
 import { daysBetween, formatMoney, formatTripDates } from '../../lib/format'
@@ -22,6 +23,7 @@ export function TripRetrospectivePage({ tripId, trip, participants, items, balan
   const [notes, setNotes] = useState(trip.notes ?? '')
   const [rating, setRating] = useState(trip.rating ?? 0)
   const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const days = daysBetween(trip.startDate, trip.endDate)
   const costPerDay = days ? trip.totalCostBase / days : null
@@ -43,14 +45,25 @@ export function TripRetrospectivePage({ tripId, trip, participants, items, balan
 
   async function handleSaveNotes() {
     setSaving(true)
-    await updateTrip(tripId, { notes: notes.trim() || undefined, rating: rating || undefined })
-    setSaving(false)
+    setSaveError(null)
+    try {
+      await updateTrip(tripId, { notes: notes.trim() || undefined, rating: rating || undefined })
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Nie udało się zapisać.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
     <div style={{ padding: spacing[5] }}>
       <span style={{ fontSize: fontSize.xs, color: colors.textMuted, fontWeight: fontWeight.semibold }}>ZAKOŃCZONY WYJAZD</span>
-      <h1 style={{ fontSize: fontSize.xl, marginTop: spacing[1] }}>{trip.name}</h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h1 style={{ fontSize: fontSize.xl, marginTop: spacing[1] }}>{trip.name}</h1>
+        <Link to={`/trips/${tripId}/edit`} aria-label="Edytuj wyjazd" style={{ color: colors.textMuted, display: 'flex' }}>
+          <Pencil size={18} />
+        </Link>
+      </div>
       <p style={{ color: colors.textMuted, marginTop: spacing[1] }}>
         {formatTripDates(trip.startDate, trip.endDate, trip.yearOnly)}
         {trip.countries.length > 0 ? ` · ${trip.countries.join(', ')}` : ''}
@@ -171,6 +184,7 @@ export function TripRetrospectivePage({ tripId, trip, participants, items, balan
             marginBottom: spacing[3],
           }}
         />
+        {saveError && <p style={{ color: colors.danger, fontSize: fontSize.sm, marginBottom: spacing[3] }}>{saveError}</p>}
         <button type="button" className="btn btn-primary" onClick={() => void handleSaveNotes()} disabled={saving}>
           Zapisz
         </button>
