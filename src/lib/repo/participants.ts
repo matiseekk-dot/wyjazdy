@@ -17,7 +17,13 @@ function participantsCol(tripId: string) {
 
 function fromDoc(snap: QueryDocumentSnapshot<DocumentData>): Participant {
   const data = snap.data()
-  return { id: snap.id, name: data.name, isMe: data.isMe ?? false, contact: data.contact }
+  return {
+    id: snap.id,
+    name: data.name,
+    isMe: data.isMe ?? false,
+    excludeFromBalance: data.excludeFromBalance ?? false,
+    contact: data.contact,
+  }
 }
 
 export function subscribeParticipants(tripId: string, callback: (participants: Participant[]) => void) {

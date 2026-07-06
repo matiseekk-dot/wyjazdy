@@ -37,13 +37,15 @@ export function computeBalances(
 }
 
 /**
- * Balances for display: the "me" participant's own share nets against themself and
- * isn't a real debt to show in "who owes me" UI — computeBalances includes it anyway
- * since it doesn't know which participant is "me", so callers filter it out here.
+ * Balances for display: excludes "me" (their share nets against themself, not a real
+ * debt) and anyone flagged excludeFromBalance (e.g. a dependent child the organizer
+ * pays for as a matter of course and will never actually reimburse) — their share
+ * still counts in totalCostBase/cost-per-person, just not in "who owes me" UI.
+ * computeBalances doesn't know about either flag, so callers filter here.
  */
 export function othersBalances(participants: Participant[], balances: ParticipantBalance[]): ParticipantBalance[] {
-  const meIds = new Set(participants.filter((p) => p.isMe).map((p) => p.id))
-  return balances.filter((b) => !meIds.has(b.participantId))
+  const excludedIds = new Set(participants.filter((p) => p.isMe || p.excludeFromBalance).map((p) => p.id))
+  return balances.filter((b) => !excludedIds.has(b.participantId))
 }
 
 function shareOf(item: Item, participantId: string): number {
