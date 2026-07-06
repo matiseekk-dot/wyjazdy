@@ -33,3 +33,11 @@ export function getTripYear(trip: Pick<Trip, 'startDate' | 'yearOnly'>): number 
   if (trip.startDate) return new Date(trip.startDate).getFullYear()
   return trip.yearOnly
 }
+
+/** Single date, or a range when dateEnd differs — for item rows, so gaps/overlaps between
+ *  consecutive bookings (e.g. accommodation nights) are visible at a glance. */
+export function formatItemDateRange(dateStart?: IsoDate, dateEnd?: IsoDate): string | null {
+  if (!dateStart) return null
+  if (dateEnd && dateEnd !== dateStart) return `${formatDate(dateStart)} – ${formatDate(dateEnd)}`
+  return formatDate(dateStart)
+}

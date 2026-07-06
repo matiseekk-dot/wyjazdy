@@ -5,7 +5,7 @@ import { ProgressBar } from '../../components/ProgressBar'
 import { StatusChip } from '../../components/StatusChip'
 import { CATEGORY_ICONS } from '../../lib/categoryIcons'
 import { othersBalances } from '../../lib/balances'
-import { formatMoney, formatTripDates } from '../../lib/format'
+import { formatItemDateRange, formatMoney, formatTripDates } from '../../lib/format'
 import { ITEM_CATEGORY_LABELS } from '../../lib/labels'
 import { colors, fontSize, fontWeight, spacing } from '../../tokens'
 import type { Item, ItemCategory } from '../../types'
@@ -24,6 +24,11 @@ export function TripDashboardPage() {
     const groups = new Map<ItemCategory, Item[]>()
     for (const category of ITEM_CATEGORIES) groups.set(category, [])
     for (const item of items) groups.get(item.category)?.push(item)
+    // Sorted chronologically so consecutive bookings (accommodation nights above all)
+    // can be scanned for gaps/overlaps — items without a date sort last, order preserved.
+    for (const group of groups.values()) {
+      group.sort((a, b) => (a.dateStart ?? '9999').localeCompare(b.dateStart ?? '9999'))
+    }
     return groups
   }, [items])
 
@@ -38,6 +43,8 @@ export function TripDashboardPage() {
   if (trip.phase === 'completed') {
     return <TripRetrospectivePage tripId={tripId} trip={trip} participants={participants} items={items} balances={balances} />
   }
+
+  const costPerPerson = participants.length > 0 ? trip.totalCostBase / participants.length : null
 
   return (
     <div style={{ padding: spacing[5] }}>
@@ -62,6 +69,12 @@ export function TripDashboardPage() {
         <div style={{ marginTop: spacing[3] }}>
           <ProgressBar done={trip.itemsDoneCount} total={trip.itemsTotalCount} />
         </div>
+        {costPerPerson !== null && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: spacing[3] }}>
+            <span style={{ color: colors.textMuted, fontSize: fontSize.sm }}>Koszt na osobę</span>
+            <span style={{ fontSize: fontSize.sm }}>{formatMoney(costPerPerson, trip.baseCurrency)}</span>
+          </div>
+        )}
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: spacing[3] }}>
           <span style={{ color: colors.textMuted, fontSize: fontSize.sm }}>Zapłacone / do zapłaty</span>
           <span style={{ fontSize: fontSize.sm }}>
@@ -136,6 +149,11 @@ export function TripDashboardPage() {
                   >
                     <div>
                       <div>{item.title}</div>
+                      {formatItemDateRange(item.dateStart, item.dateEnd) && (
+                        <div style={{ fontSize: fontSize.xs, color: colors.textMuted }}>
+                          {formatItemDateRange(item.dateStart, item.dateEnd)}
+                        </div>
+                      )}
                       <div style={{ fontSize: fontSize.xs, color: colors.textMuted }}>
                         {formatMoney(item.amountOriginal, item.currency)}
                         {item.currency !== trip.baseCurrency && ` (${formatMoney(item.amountBase, trip.baseCurrency)})`}
