@@ -4,6 +4,7 @@ import { formStyles } from '../../components/formStyles'
 import { getCurrencyOptions } from '../../lib/currencies'
 import { ITEM_CATEGORY_LABELS, ITEM_STATUS_LABELS } from '../../lib/labels'
 import { fetchNbpRate } from '../../lib/nbp'
+import { COMMON_PROVIDERS } from '../../lib/providers'
 import { createItem, deleteItem, getItem, getTrip, subscribeParticipants, updateItem } from '../../lib/repo'
 import { colors, fontSize, spacing } from '../../tokens'
 import { ITEM_CATEGORIES, ITEM_STATUSES } from '../../types'
@@ -223,11 +224,17 @@ export function ItemFormPage() {
             </label>
             <input
               id="provider"
+              list="provider-options"
               style={formStyles.input}
               value={provider}
               onChange={(e) => setProvider(e.target.value)}
               placeholder="Wizz, LOT, Airbnb…"
             />
+            <datalist id="provider-options">
+              {COMMON_PROVIDERS.map((p) => (
+                <option key={p} value={p} />
+              ))}
+            </datalist>
           </div>
           <div style={{ ...formStyles.field, flex: 1 }}>
             <label style={formStyles.label} htmlFor="confirmationNo">

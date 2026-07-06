@@ -60,8 +60,8 @@ export function TripRetrospectivePage({ tripId, trip, participants, items, balan
       <span style={{ fontSize: fontSize.xs, color: colors.textMuted, fontWeight: fontWeight.semibold }}>ZAKOŃCZONY WYJAZD</span>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h1 style={{ fontSize: fontSize.xl, marginTop: spacing[1] }}>{trip.name}</h1>
-        <Link to={`/trips/${tripId}/edit`} aria-label="Edytuj wyjazd" style={{ color: colors.textMuted, display: 'flex' }}>
-          <Pencil size={18} />
+        <Link to={`/trips/${tripId}/edit`} className="btn btn-ghost" style={{ fontSize: fontSize.sm, padding: `${spacing[2]} ${spacing[3]}` }}>
+          <Pencil size={15} /> Edytuj
         </Link>
       </div>
       <p style={{ color: colors.textMuted, marginTop: spacing[1] }}>
