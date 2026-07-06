@@ -42,6 +42,16 @@ export interface Item {
   /** amountOriginal * fxRateToBase, computed once at write time. */
   amountBase: number
 
+  /**
+   * How much of amountOriginal has actually been paid so far — independent of
+   * `status`. A hotel can be "confirmed" (booking locked in) with only a deposit
+   * paid, balance due at check-in; this is what drives "Zapłacone / do zapłaty",
+   * not the status pipeline.
+   */
+  paidAmount: number
+  /** paidAmount * fxRateToBase, computed once at write time. */
+  paidAmountBase: number
+
   /** Participant id who paid, usually "me". Null while still an idea/to_book. */
   paidBy: string | null
   /** Participant ids this cost applies to. */
@@ -58,7 +68,7 @@ export interface Item {
   updatedAt: IsoDate
 }
 
-export type ItemDraft = Omit<Item, 'id' | 'amountBase' | 'attachments' | 'createdAt' | 'updatedAt'>
+export type ItemDraft = Omit<Item, 'id' | 'amountBase' | 'paidAmountBase' | 'attachments' | 'createdAt' | 'updatedAt'>
 
 export const ITEM_CATEGORIES: ItemCategory[] = [
   'flight',

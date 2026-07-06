@@ -91,21 +91,26 @@ async function importTrip(sourceTrip) {
 
   const items = (sourceTrip.estimates ?? []).map((estimate) => {
     const amountOriginal = parseFloat(estimate.cost) || 0
+    // The old tracker had no partial-payment concept — booked meant paid in full.
+    const status = estimate.booked ? 'confirmed' : 'idea'
+    const paidAmount = status === 'confirmed' ? amountOriginal : 0
     return {
       docId: sanitizeDocId(estimate.id),
       category: mapCategory(estimate.category),
       title: estimate.label || '(bez nazwy)',
       notes: estimate.notes?.trim() || undefined,
-      status: estimate.booked ? 'confirmed' : 'idea',
+      status,
       amountOriginal,
       currency: 'PLN',
       fxRateToBase: 1,
       amountBase: amountOriginal,
+      paidAmount,
+      paidAmountBase: paidAmount,
     }
   })
 
   const totalCostBase = items.reduce((sum, i) => sum + i.amountBase, 0)
-  const paidCostBase = items.filter((i) => DONE_STATUSES.has(i.status)).reduce((sum, i) => sum + i.amountBase, 0)
+  const paidCostBase = items.reduce((sum, i) => sum + i.paidAmountBase, 0)
   const itemsDoneCount = items.filter((i) => DONE_STATUSES.has(i.status)).length
 
   await setDoc(doc(db, 'trips', tripDocId), {
@@ -139,6 +144,8 @@ async function importTrip(sourceTrip) {
         currency: item.currency,
         fxRateToBase: item.fxRateToBase,
         amountBase: item.amountBase,
+        paidAmount: item.paidAmount,
+        paidAmountBase: item.paidAmountBase,
         paidBy: null,
         splitAmong: [],
         splitMode: 'equal',

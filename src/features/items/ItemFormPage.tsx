@@ -30,6 +30,7 @@ export function ItemFormPage() {
   const [location, setLocation] = useState('')
   const [status, setStatus] = useState<ItemStatus>('idea')
   const [amountOriginal, setAmountOriginal] = useState('')
+  const [paidAmount, setPaidAmount] = useState('0')
   const [currency, setCurrency] = useState('PLN')
   const [fxRateToBase, setFxRateToBase] = useState('1')
   const [nbpLoading, setNbpLoading] = useState(false)
@@ -66,6 +67,7 @@ export function ItemFormPage() {
       setLocation(item.location ?? '')
       setStatus(item.status)
       setAmountOriginal(String(item.amountOriginal))
+      setPaidAmount(String(item.paidAmount))
       setCurrency(item.currency)
       setFxRateToBase(String(item.fxRateToBase))
       setPaidBy(item.paidBy ?? '')
@@ -139,6 +141,7 @@ export function ItemFormPage() {
       location: location.trim() || undefined,
       status,
       amountOriginal: parseFloat(amountOriginal) || 0,
+      paidAmount: parseFloat(paidAmount) || 0,
       currency,
       fxRateToBase: parseFloat(fxRateToBase) || 1,
       paidBy: paidBy || null,
@@ -341,6 +344,35 @@ export function ItemFormPage() {
               ))}
             </select>
           </div>
+        </div>
+
+        <div style={formStyles.field}>
+          <label style={formStyles.label} htmlFor="paidAmount">
+            Zapłacono dotychczas
+          </label>
+          <div style={{ display: 'flex', gap: spacing[2] }}>
+            <input
+              id="paidAmount"
+              type="number"
+              step="0.01"
+              style={{ ...formStyles.input, flex: 1 }}
+              value={paidAmount}
+              onChange={(e) => setPaidAmount(e.target.value)}
+            />
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={() => setPaidAmount(amountOriginal)}
+              style={{ fontSize: fontSize.sm, whiteSpace: 'nowrap' }}
+            >
+              Cała kwota
+            </button>
+          </div>
+          {(parseFloat(amountOriginal) || 0) - (parseFloat(paidAmount) || 0) > 0.005 && (
+            <span style={{ fontSize: fontSize.xs, color: colors.textMuted, marginTop: spacing[1] }}>
+              Zostało do zapłaty: {((parseFloat(amountOriginal) || 0) - (parseFloat(paidAmount) || 0)).toFixed(2)} {currency}
+            </span>
+          )}
         </div>
 
         <div style={formStyles.field}>

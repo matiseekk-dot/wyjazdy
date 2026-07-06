@@ -38,6 +38,8 @@ function fromDoc(snap: QueryDocumentSnapshot<DocumentData>): Item {
     currency: data.currency,
     fxRateToBase: data.fxRateToBase,
     amountBase: data.amountBase,
+    paidAmount: data.paidAmount ?? 0,
+    paidAmountBase: data.paidAmountBase ?? 0,
     paidBy: data.paidBy ?? null,
     splitAmong: data.splitAmong ?? [],
     splitMode: data.splitMode,
@@ -64,6 +66,7 @@ export async function createItem(tripId: string, draft: ItemDraft): Promise<stri
     dateStart: isoToTs(draft.dateStart),
     dateEnd: isoToTs(draft.dateEnd),
     amountBase: draft.amountOriginal * draft.fxRateToBase,
+    paidAmountBase: draft.paidAmount * draft.fxRateToBase,
     attachments: [],
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -74,13 +77,11 @@ export async function createItem(tripId: string, draft: ItemDraft): Promise<stri
 
 export async function updateItem(tripId: string, itemId: string, patch: Partial<ItemDraft>) {
   const { dateStart, dateEnd, ...rest } = patch
-  const amountBasePatch =
-    patch.amountOriginal !== undefined || patch.fxRateToBase !== undefined
-      ? { amountBase: await computeAmountBase(tripId, itemId, patch) }
-      : {}
+  const needsRecompute = patch.amountOriginal !== undefined || patch.fxRateToBase !== undefined || patch.paidAmount !== undefined
+  const derivedPatch = needsRecompute ? await computeDerivedAmounts(tripId, itemId, patch) : {}
   await updateDoc(doc(itemsCol(tripId), itemId), {
     ...rest,
-    ...amountBasePatch,
+    ...derivedPatch,
     ...(dateStart !== undefined ? { dateStart: isoToTs(dateStart) } : {}),
     ...(dateEnd !== undefined ? { dateEnd: isoToTs(dateEnd) } : {}),
     updatedAt: serverTimestamp(),
@@ -88,11 +89,12 @@ export async function updateItem(tripId: string, itemId: string, patch: Partial<
   await recomputeTripAggregates(tripId)
 }
 
-async function computeAmountBase(tripId: string, itemId: string, patch: Partial<ItemDraft>) {
+async function computeDerivedAmounts(tripId: string, itemId: string, patch: Partial<ItemDraft>) {
   const current = await getItem(tripId, itemId)
   const amountOriginal = patch.amountOriginal ?? current?.amountOriginal ?? 0
   const fxRateToBase = patch.fxRateToBase ?? current?.fxRateToBase ?? 1
-  return amountOriginal * fxRateToBase
+  const paidAmount = patch.paidAmount ?? current?.paidAmount ?? 0
+  return { amountBase: amountOriginal * fxRateToBase, paidAmountBase: paidAmount * fxRateToBase }
 }
 
 export async function deleteItem(tripId: string, itemId: string) {
@@ -107,10 +109,9 @@ async function recomputeTripAggregates(tripId: string) {
   let itemsDoneCount = 0
   snap.docs.forEach((d) => {
     const data = d.data()
-    const amountBase = (data.amountBase as number) ?? 0
-    totalCostBase += amountBase
+    totalCostBase += (data.amountBase as number) ?? 0
+    paidCostBase += (data.paidAmountBase as number) ?? 0
     if (ITEM_STATUSES_DONE.includes(data.status)) {
-      paidCostBase += amountBase
       itemsDoneCount += 1
     }
   })

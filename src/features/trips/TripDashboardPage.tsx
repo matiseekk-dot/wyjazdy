@@ -139,6 +139,12 @@ export function TripDashboardPage() {
                       <div style={{ fontSize: fontSize.xs, color: colors.textMuted }}>
                         {formatMoney(item.amountOriginal, item.currency)}
                         {item.currency !== trip.baseCurrency && ` (${formatMoney(item.amountBase, trip.baseCurrency)})`}
+                        {item.paidAmount > 0.005 && item.paidAmount < item.amountOriginal - 0.005 && (
+                          <span style={{ color: colors.warning }}>
+                            {' '}
+                            · opłacone {formatMoney(item.paidAmount, item.currency)}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <StatusChip status={item.status} />
