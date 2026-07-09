@@ -350,7 +350,7 @@ export function ItemFormPage() {
           <label style={formStyles.label} htmlFor="paidAmount">
             Zapłacono dotychczas
           </label>
-          <div style={{ display: 'flex', gap: spacing[2] }}>
+          <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap' }}>
             <input
               id="paidAmount"
               type="number"
@@ -379,7 +379,7 @@ export function ItemFormPage() {
           <label style={formStyles.label} htmlFor="fxRateToBase">
             Kurs do {trip?.baseCurrency ?? 'waluty bazowej'} (zamrożony na moment wpisania)
           </label>
-          <div style={{ display: 'flex', gap: spacing[2] }}>
+          <div style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap' }}>
             <input
               id="fxRateToBase"
               type="number"
@@ -438,7 +438,7 @@ export function ItemFormPage() {
 
         <div style={formStyles.field}>
           <label style={formStyles.label}>Sposób podziału</label>
-          <div style={{ display: 'flex', gap: spacing[3] }}>
+          <div style={{ display: 'flex', gap: spacing[3], flexWrap: 'wrap' }}>
             {(['equal', 'shares', 'custom'] as SplitMode[]).map((mode) => (
               <label key={mode} style={{ display: 'flex', alignItems: 'center', gap: spacing[1], fontSize: fontSize.sm }}>
                 <input type="radio" name="splitMode" checked={splitMode === mode} onChange={() => setSplitMode(mode)} />
@@ -504,7 +504,7 @@ export function ItemFormPage() {
         {saveError && (
           <p style={{ color: colors.danger, fontSize: fontSize.sm, marginBottom: spacing[3] }}>{saveError}</p>
         )}
-        <div style={{ display: 'flex', gap: spacing[3] }}>
+        <div style={{ display: 'flex', gap: spacing[3], flexWrap: 'wrap' }}>
           <button
             type="submit"
             className="btn btn-primary"

@@ -17,7 +17,16 @@ const bottomClearance = `calc(${layout.navHeight} + env(safe-area-inset-bottom) 
 export function Layout() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
-      <main style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: bottomClearance, scrollPaddingBottom: bottomClearance }}>
+      <main
+        style={{
+          flex: 1,
+          minHeight: 0,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          paddingBottom: bottomClearance,
+          scrollPaddingBottom: bottomClearance,
+        }}
+      >
         <Outlet />
       </main>
       <nav style={styles.nav}>

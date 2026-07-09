@@ -23,6 +23,10 @@ export const formStyles = {
   row: {
     display: 'flex',
     gap: 'var(--space-3)',
+    // Two flex:1 fields side by side can still overflow on very narrow phones (~320px)
+    // if their content has a natural minimum width (e.g. inputs) — wrap instead of
+    // forcing the page to scroll sideways.
+    flexWrap: 'wrap',
   },
 } as const satisfies Record<string, CSSProperties>
 

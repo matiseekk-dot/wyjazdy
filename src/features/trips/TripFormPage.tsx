@@ -202,7 +202,7 @@ export function TripFormPage() {
         </div>
 
         {saveError && <p style={{ color: colors.danger, fontSize: fontSize.sm, marginBottom: spacing[3] }}>{saveError}</p>}
-        <div style={{ display: 'flex', gap: spacing[3] }}>
+        <div style={{ display: 'flex', gap: spacing[3], flexWrap: 'wrap' }}>
           <button type="submit" className="btn btn-primary" disabled={saving}>
             {isEdit ? 'Zapisz' : 'Utwórz wyjazd'}
           </button>

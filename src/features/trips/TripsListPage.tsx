@@ -31,7 +31,7 @@ export function TripsListPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[4] }}>
           {trips.map((trip) => (
             <Link key={trip.id} to={`/trips/${trip.id}`} className="card" style={{ padding: spacing[4] }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: spacing[1] }}>
                 <strong style={{ fontSize: fontSize.lg }}>{trip.name}</strong>
                 <span style={{ fontSize: fontSize.sm, color: colors.textMuted, whiteSpace: 'nowrap' }}>
                   {formatTripDates(trip.startDate, trip.endDate, trip.yearOnly)}

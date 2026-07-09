@@ -92,7 +92,7 @@ export function SettingsPage() {
         </div>
       )}
 
-      <form onSubmit={handleAddCurrency} style={{ display: 'flex', gap: spacing[2] }}>
+      <form onSubmit={handleAddCurrency} style={{ display: 'flex', gap: spacing[2], flexWrap: 'wrap' }}>
         <input
           style={{ ...formStyles.input, flex: 1, textTransform: 'uppercase' }}
           value={newCurrency}

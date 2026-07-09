@@ -47,7 +47,7 @@ export function ArchivePage() {
         </div>
       ) : (
         <>
-          <div style={{ display: 'flex', gap: spacing[3], marginTop: spacing[5], marginBottom: spacing[4] }}>
+          <div style={{ display: 'flex', gap: spacing[3], marginTop: spacing[5], marginBottom: spacing[4], flexWrap: 'wrap' }}>
             <select style={styles.filter} value={yearFilter} onChange={(e) => setYearFilter(e.target.value)}>
               <option value="all">Wszystkie lata</option>
               {uniqueYears.map((y) => (
@@ -69,7 +69,7 @@ export function ArchivePage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[3] }}>
             {filtered.map((trip) => (
               <Link key={trip.id} to={`/trips/${trip.id}`} className="card" style={{ padding: spacing[4] }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: spacing[1] }}>
                   <strong>{trip.name}</strong>
                   <span style={{ fontSize: fontSize.sm, color: colors.textMuted }}>
                     {formatTripDates(trip.startDate, trip.endDate, trip.yearOnly)}
@@ -102,6 +102,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 const styles = {
   filter: {
     flex: 1,
+    minWidth: 130,
     fontSize: fontSize.sm,
     padding: spacing[2],
     borderRadius: 'var(--radius-md)',

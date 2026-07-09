@@ -48,7 +48,7 @@ export function TripDashboardPage() {
 
   return (
     <div style={{ padding: spacing[5] }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: spacing[2] }}>
         <h1 style={{ fontSize: fontSize.xl }}>{trip.name}</h1>
         <Link to={`/trips/${tripId}/edit`} className="btn btn-ghost" style={{ fontSize: fontSize.sm, padding: `${spacing[2]} ${spacing[3]}` }}>
           <Pencil size={15} /> Edytuj
@@ -90,7 +90,7 @@ export function TripDashboardPage() {
         )}
       </div>
 
-      <div style={{ display: 'flex', gap: spacing[3], marginTop: spacing[4] }}>
+      <div style={{ display: 'flex', gap: spacing[3], marginTop: spacing[4], flexWrap: 'wrap' }}>
         <Link to={`/trips/${tripId}/settlements`} className="btn btn-ghost" style={{ fontSize: fontSize.sm }}>
           <Scale size={16} /> Rozliczenia
         </Link>
@@ -104,7 +104,7 @@ export function TripDashboardPage() {
 
       <ParticipantsSection tripId={tripId} participants={participants} />
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing[6] }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing[6], flexWrap: 'wrap', gap: spacing[2] }}>
         <h2 style={{ fontSize: fontSize.lg }}>Pozycje</h2>
         <Link
           to={`/trips/${tripId}/items/new`}
